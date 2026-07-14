@@ -16,17 +16,25 @@ Variante A — über die Oberfläche:
 
 Variante B — manuell:
 
+Für Linux:
 ```bash
-# Linux
-cp -r . ~/.config/Mailspring/packages/ai-reply-drafts
+mkdir -p ~/.config/Mailspring/packages/ai-reply-drafts
+cp -r * ~/.config/Mailspring/packages/ai-reply-drafts/
 ```
 
+Für macOS:
+```bash
+mkdir -p ~/Library/Application\ Support/Mailspring/packages/ai-reply-drafts
+cp -r * ~/Library/Application\ Support/Mailspring/packages/ai-reply-drafts/
+```
+
+Für Windows (PowerShell):
 ```powershell
-# Windows (PowerShell)
-Copy-Item -Recurse . "$env:APPDATA\Mailspring\packages\ai-reply-drafts"
+mkdir -Force "$env:APPDATA\Mailspring\packages\ai-reply-drafts"
+Copy-Item -Recurse -Force * "$env:APPDATA\Mailspring\packages\ai-reply-drafts"
 ```
 
-Der Ordner `packages` muss ggf. vorher angelegt werden. Danach Mailspring neu starten.
+Danach Mailspring neu starten.
 Es ist kein Build-Schritt nötig — der Ordner kann 1:1 kopiert werden.
 
 ## Konfiguration
