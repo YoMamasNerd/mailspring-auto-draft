@@ -37,7 +37,7 @@ Unter **Einstellungen → AI Drafts**:
 | Basis-URL | OpenAI-kompatibler Endpunkt **ohne** `/chat/completions`, z.B. `http://localhost:4000/v1` (LiteLLM) oder `http://localhost:11434/v1` (Ollama) |
 | API-Key | Optional; wird als `Authorization: Bearer …` gesendet |
 | Modell | Dropdown, wird über `GET {Basis-URL}/models` befüllt („Modelle laden / Verbindung testen“ prüft zugleich URL und API-Key). Falls dein Backend `/models` nicht anbietet, kannst du den Namen manuell eingeben |
-| System-Prompt | Stil-/Inhaltsanweisungen für die generierten Antworten |
+| System-Prompt | Stil-/Inhaltsanweisungen für die generierten Antworten. Wird immer mitgesendet und übersteuert damit ggf. backend-seitig konfigurierte Prompts (z.B. den Workspace-Prompt von AnythingLLM) — so verhält sich das Plugin bei jedem Provider gleich |
 | Zusätzliche Request-Parameter | JSON, das in den Request-Body gemischt wird |
 | Automatisch generieren | Wenn aus, erscheint stattdessen ein Button im Composer |
 | E-Mail-Verlauf senden | Lädt die letzten 10 Nachrichten des Threads aus der Mailspring-Datenbank als Kontext (max. 15.000 Zeichen, Zitate dedupliziert). Wenn aus, wird nur das Zitat aus dem Entwurf gesendet |
