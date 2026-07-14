@@ -1,0 +1,139 @@
+@import 'ui-variables';
+
+.ai-reply-drafts-panel {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 1px solid @border-color-divider;
+  border-radius: 6px;
+  background: @background-secondary;
+  color: @text-color;
+  font-size: 0.95em;
+
+  &.ai-hint {
+    color: @text-color-very-subtle;
+
+    a {
+      cursor: pointer;
+      text-decoration: underline;
+      color: @text-color-link;
+    }
+  }
+
+  &.ai-loading {
+    color: @text-color-very-subtle;
+    font-style: italic;
+  }
+
+  &.ai-error .ai-error-message {
+    color: @color-error;
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+  }
+
+  .ai-suggestion-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: @text-color-subtle;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .ai-suggestion-text {
+    white-space: pre-wrap;
+    max-height: 260px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    line-height: 1.45;
+    color: @text-color;
+  }
+
+  .ai-actions .btn {
+    margin-right: 8px;
+  }
+}
+
+.ai-reply-drafts-preferences {
+  padding: 20px;
+  max-width: 640px;
+  color: @text-color;
+
+  h2 {
+    margin-bottom: 16px;
+    color: @text-color-heading;
+  }
+
+  .ai-pref-field {
+    margin-bottom: 16px;
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: @text-color;
+    }
+
+    input[type='text'],
+    input[type='password'],
+    textarea,
+    select {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid @border-color-divider;
+      border-radius: 4px;
+      font-family: inherit;
+      background: @input-bg;
+      color: @text-color;
+    }
+
+    textarea {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    .ai-pref-model-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      input,
+      select {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .btn {
+        flex-shrink: 0;
+      }
+    }
+
+    .ai-pref-status {
+      margin-top: 4px;
+      font-size: 0.85em;
+      color: @text-color-very-subtle;
+
+      &.ai-pref-status-ok {
+        color: @color-success;
+      }
+
+      &.ai-pref-status-error {
+        color: @color-error;
+      }
+    }
+
+    .ai-pref-help {
+      margin-top: 4px;
+      font-size: 0.85em;
+      color: @text-color-very-subtle;
+    }
+  }
+
+  .ai-pref-checkbox label {
+    font-weight: normal;
+
+    input {
+      margin-right: 6px;
+      width: auto;
+    }
+  }
+}
