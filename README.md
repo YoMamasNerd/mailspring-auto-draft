@@ -1,10 +1,11 @@
 # AI Reply Drafts für Mailspring
 
-Generiert automatisch KI-Antwortvorschläge über eine beliebige **OpenAI-kompatible API**
-(LiteLLM, Ollama, vLLM, Open WebUI, OpenAI, …), sobald du in Mailspring auf eine E-Mail
-antwortest. Der Vorschlag erscheint unterhalb des Composers mit den Aktionen
-**Einfügen / Neu generieren / Verwerfen**. Beim Einfügen landet der Text oberhalb von
-Signatur und zitiertem Original.
+Generiert KI-Antwortvorschläge oder neue E-Mails über eine beliebige **OpenAI-kompatible API**
+(LiteLLM, Ollama, vLLM, Open WebUI, OpenAI, …) direkt in Mailspring.
+
+- **Antworten**: Der Entwurf wird automatisch (optional) oder per Klick generiert und greift auf den vorherigen Verlauf (oder das Zitat) zurück.
+- **Neue E-Mails**: Gib im Composer einfach ein paar Anweisungen oder Stichpunkte ein (z. B. „Schreibe Einladung zu ...“) und klicke auf **✨ KI-Entwurf generieren**, um die vollständige E-Mail schreiben zu lassen.
+- **Editierbar & Flexibel**: Der Entwurf kann vor dem Einfügen direkt im Composer-Panel bearbeitet werden. Existierender Text kann beim Einfügen wahlweise **ersetzt** (z. B. zum Ersetzen von Stichpunkten) oder der Entwurf **angehängt** werden.
 
 ## Installation
 
@@ -64,13 +65,15 @@ Unter **Einstellungen → AI Drafts**:
 ## Funktionsweise
 
 - Registriert sich über die `Composer:Footer`-Rolle und erhält `draft` + `session`.
-- Erkennt Antworten über `draft.replyToHeaderMessageId`.
-- Lädt standardmäßig den Thread-Verlauf über Mailsprings `DatabaseStore` (Zitate werden
+- Funktioniert sowohl bei Antworten (Erkennung über `draft.replyToHeaderMessageId`) als auch beim Verfassen neuer E-Mails.
+- Lädt bei Antworten standardmäßig den Thread-Verlauf über Mailsprings `DatabaseStore` (Zitate werden
   per `QuotedHTMLTransformer` dedupliziert) und sendet ihn zusammen mit Betreff,
   Empfänger und einem evtl. schon getippten Antwort-Anfang an
   `POST {Basis-URL}/chat/completions`. Fallback: das Zitat aus dem Draft-Body.
-- Fügt den Vorschlag mit derselben Logik wie Mailsprings internes Templates-Plugin vor
-  `<signature>` / `gmail_quote` in den Body ein.
+- Beim Verfassen einer neuen E-Mail dient der bereits eingetippte Text als direkte Anweisung für die Generierung.
+- Der generierte Entwurf kann direkt im Panel angepasst werden (das Vorschaufenster ist editierbar).
+- Beim Einfügen hat man die Wahl, den getippten Text zu **ersetzen** (Standard für Anweisungen) oder den neuen Entwurf an den Text **anzuhängen**.
+- Fügt den Vorschlag vor `<signature>` / `gmail_quote` in den Body ein.
 
 ## Hinweise
 
