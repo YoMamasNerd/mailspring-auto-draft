@@ -53,6 +53,13 @@
   }
 }
 
+// Eigenes Tab-Icon: Mailsprings Bild-Cache kennt nur app-eigene Bilder
+// (icon-preferences-*.png), Plugins können dort nichts registrieren — daher
+// wird das Zahnrad-Fallback per CSS durch ein Sparkle-Icon ersetzt.
+.container-preference-tabs .item[aria-label='AI Drafts'] img.tab-icon {
+  content: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"%3E%3Cpath fill="%238b5cf6" d="M19 3l4 9.5L32.5 16 23 20 19 29.5 15 20 5.5 16 15 12.5z"/%3E%3Cpath fill="%233b82f6" d="M30.5 23l2.2 5.3 5.3 2.2-5.3 2.2-2.2 5.3-2.2-5.3-5.3-2.2 5.3-2.2z"/%3E%3Cpath fill="%2360a5fa" d="M9.5 27l1.6 3.9 3.9 1.6-3.9 1.6L9.5 38l-1.6-3.9L4 32.5l3.9-1.6z"/%3E%3C/svg%3E');
+}
+
 .ai-reply-drafts-preferences {
   padding: 20px;
   max-width: 640px;
