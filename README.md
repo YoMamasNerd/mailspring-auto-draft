@@ -40,6 +40,7 @@ Unter **Einstellungen → AI Drafts**:
 | System-Prompt | Stil-/Inhaltsanweisungen für die generierten Antworten |
 | Zusätzliche Request-Parameter | JSON, das in den Request-Body gemischt wird |
 | Automatisch generieren | Wenn aus, erscheint stattdessen ein Button im Composer |
+| E-Mail-Verlauf senden | Lädt die letzten 10 Nachrichten des Threads aus der Mailspring-Datenbank als Kontext (max. 15.000 Zeichen, Zitate dedupliziert). Wenn aus, wird nur das Zitat aus dem Entwurf gesendet |
 
 ### Wissensdatenbank / RAG
 
@@ -64,9 +65,10 @@ Unter **Einstellungen → AI Drafts**:
 
 - Registriert sich über die `Composer:Footer`-Rolle und erhält `draft` + `session`.
 - Erkennt Antworten über `draft.replyToHeaderMessageId`.
-- Extrahiert den zitierten Originaltext (`blockquote.gmail_quote`) und einen evtl. schon
-  getippten Antwort-Anfang aus dem Draft-Body und sendet beides zusammen mit Betreff und
-  Empfänger an `POST {Basis-URL}/chat/completions`.
+- Lädt standardmäßig den Thread-Verlauf über Mailsprings `DatabaseStore` (Zitate werden
+  per `QuotedHTMLTransformer` dedupliziert) und sendet ihn zusammen mit Betreff,
+  Empfänger und einem evtl. schon getippten Antwort-Anfang an
+  `POST {Basis-URL}/chat/completions`. Fallback: das Zitat aus dem Draft-Body.
 - Fügt den Vorschlag mit derselben Logik wie Mailsprings internes Templates-Plugin vor
   `<signature>` / `gmail_quote` in den Body ein.
 
