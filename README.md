@@ -3,7 +3,7 @@
 Generiert KI-Antwortvorschläge oder neue E-Mails über eine beliebige **OpenAI-kompatible API**
 (LiteLLM, Ollama, vLLM, Open WebUI, OpenAI, …) direkt in Mailspring.
 
-- **Antworten**: Der Entwurf wird automatisch (optional) oder per Klick generiert und greift auf den vorherigen Verlauf (oder das Zitat) zurück.
+- **Antworten**: Der Entwurf wird automatisch (optional) oder per Klick generiert und greift auf den vorherigen Verlauf (oder das Zitat) zurück. Eigene Stichpunkte oder Notizen im Antwortfeld werden als inhaltliche Vorgabe verwendet und zu vollständigen Sätzen ausformuliert.
 - **Neue E-Mails**: Gib im Composer einfach ein paar Anweisungen oder Stichpunkte ein (z. B. „Schreibe Einladung zu ...“) und klicke auf **✨ KI-Entwurf generieren**, um die vollständige E-Mail schreiben zu lassen.
 - **Editierbar & Flexibel**: Der Entwurf kann vor dem Einfügen direkt im Composer-Panel bearbeitet werden. Existierender Text kann beim Einfügen wahlweise **ersetzt** (z. B. zum Ersetzen von Stichpunkten) oder der Entwurf **angehängt** werden.
 
@@ -76,8 +76,11 @@ Unter **Einstellungen → AI Drafts**:
 - Funktioniert sowohl bei Antworten (Erkennung über `draft.replyToHeaderMessageId`) als auch beim Verfassen neuer E-Mails.
 - Lädt bei Antworten standardmäßig den Thread-Verlauf über Mailsprings `DatabaseStore` (Zitate werden
   per `QuotedHTMLTransformer` dedupliziert) und sendet ihn zusammen mit Betreff,
-  Empfänger und einem evtl. schon getippten Antwort-Anfang an
-  `POST {Basis-URL}/chat/completions`. Fallback: das Zitat aus dem Draft-Body.
+  Empfänger und evtl. schon getipptem eigenem Text (Stichpunkte, Notizen oder ein
+  Antwort-Anfang) an `POST {Basis-URL}/chat/completions`. Stichpunkte werden dabei zu
+  vollständigen Sätzen ausformuliert. Fallback: das Zitat aus dem Draft-Body.
+- Vor jeder Generierung werden ausstehende Editor-Änderungen committet, damit auch
+  gerade erst getippter Text sicher im gesendeten Kontext landet.
 - Beim Verfassen einer neuen E-Mail dient der bereits eingetippte Text als direkte Anweisung für die Generierung.
 - Der generierte Entwurf kann direkt im Panel angepasst werden (das Vorschaufenster ist editierbar).
 - Beim Einfügen hat man die Wahl, den getippten Text zu **ersetzen** (Standard für Anweisungen) oder den neuen Entwurf an den Text **anzuhängen**.
@@ -89,4 +92,7 @@ Unter **Einstellungen → AI Drafts**:
   Mailsprings `config.json`.
 - Pro Draft wird automatisch nur einmal generiert; weitere Vorschläge über
   „Neu generieren“.
+- Bei aktivierter Auto-Generierung startet die Generierung direkt beim Öffnen des
+  Composers — also **bevor** eigene Stichpunkte getippt wurden. Um Stichpunkte
+  einfließen zu lassen: erst tippen, dann „Neu generieren“ klicken.
 - Timeout pro Anfrage: 90 Sekunden.
