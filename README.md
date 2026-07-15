@@ -4,8 +4,13 @@ Generiert KI-Antwortvorschläge oder neue E-Mails über eine beliebige **OpenAI-
 (LiteLLM, Ollama, vLLM, Open WebUI, OpenAI, …) direkt in Mailspring.
 
 - **Antworten**: Der Entwurf wird automatisch (optional) oder per Klick generiert und greift auf den vorherigen Verlauf (oder das Zitat) zurück. Eigene Stichpunkte oder Notizen im Antwortfeld werden als inhaltliche Vorgabe verwendet und zu vollständigen Sätzen ausformuliert.
-- **Neue E-Mails**: Gib im Composer einfach ein paar Anweisungen oder Stichpunkte ein (z. B. „Schreibe Einladung zu ...“) und klicke auf **✨ KI-Entwurf generieren**, um die vollständige E-Mail schreiben zu lassen.
+- **Neue E-Mails**: Gib im Composer einfach ein paar Anweisungen oder Stichpunkte ein (z. B. „Schreibe Einladung zu ...“) und klicke auf **✨ KI-Entwurf generieren**, um die vollständige E-Mail schreiben zu lassen. Ist der Betreff noch leer, wird ein Betreffvorschlag mitgeneriert und beim Einfügen übernommen.
+- **Streaming**: Der Vorschlag erscheint live Wort für Wort im Panel — kein langes Warten auf die komplette Antwort, Abbrechen jederzeit möglich.
+- **Ton-Schnellwahl**: Chips für *Standard / Formell / Locker / Kurz* direkt im Panel, ohne den System-Prompt anzufassen.
+- **Verfeinern**: Änderungswunsch eintippen („kürzer“, „erwähne noch …“) — der vorhandene Vorschlag wird gezielt überarbeitet statt neu gewürfelt.
 - **Editierbar & Flexibel**: Der Entwurf kann vor dem Einfügen direkt im Composer-Panel bearbeitet werden. Existierender Text kann beim Einfügen wahlweise **ersetzt** (z. B. zum Ersetzen von Stichpunkten) oder der Entwurf **angehängt** werden.
+- **Transparenz**: Eine Statuszeile zeigt, welcher Kontext tatsächlich gesendet wurde (Verlauf mit Nachrichtenzahl, Zitat, eigene Stichpunkte).
+- **Tastenkürzel**: `Strg/Cmd+Umschalt+G` im Composer startet die Generierung.
 
 ## Installation
 
@@ -47,6 +52,7 @@ Unter **Einstellungen → AI Drafts**:
 | API-Key | Optional; wird als `Authorization: Bearer …` gesendet |
 | Modell | Dropdown, wird über `GET {Basis-URL}/models` befüllt („Modelle laden / Verbindung testen“ prüft zugleich URL und API-Key). Falls dein Backend `/models` nicht anbietet, kannst du den Namen manuell eingeben |
 | System-Prompt | Stil-/Inhaltsanweisungen für die generierten Antworten. Wird immer mitgesendet und übersteuert damit ggf. backend-seitig konfigurierte Prompts (z.B. den Workspace-Prompt von AnythingLLM) — so verhält sich das Plugin bei jedem Provider gleich |
+| Antwortsprache | Erzwingt die Sprache der generierten E-Mail (z.B. immer Deutsch). Standard: automatisch, gleiche Sprache wie die Original-E-Mail |
 | Zusätzliche Request-Parameter | JSON, das in den Request-Body gemischt wird |
 | Automatisch generieren | Wenn aus, erscheint stattdessen ein Button im Composer |
 | E-Mail-Verlauf senden | Lädt die letzten 10 Nachrichten des Threads aus der Mailspring-Datenbank als Kontext (max. 15.000 Zeichen, Zitate dedupliziert). Wenn aus, wird nur das Zitat aus dem Entwurf gesendet |
@@ -81,6 +87,12 @@ Unter **Einstellungen → AI Drafts**:
   vollständigen Sätzen ausformuliert. Fallback: das Zitat aus dem Draft-Body.
 - Vor jeder Generierung werden ausstehende Editor-Änderungen committet, damit auch
   gerade erst getippter Text sicher im gesendeten Kontext landet.
+- Der Name des Absender-Kontos wird mitgesendet, damit Grußformel und Perspektive
+  stimmen; bei „Verfeinern“ geht der bisherige Vorschlag als Assistant-Nachricht in
+  die Folgeanfrage.
+- Antworten streamen per SSE (`stream: true`) live ins Panel. Backends ohne
+  Streaming werden automatisch erkannt (JSON-Fallback); mit `{"stream": false}` in
+  den zusätzlichen Request-Parametern lässt sich Streaming gezielt abschalten.
 - Beim Verfassen einer neuen E-Mail dient der bereits eingetippte Text als direkte Anweisung für die Generierung.
 - Der generierte Entwurf kann direkt im Panel angepasst werden (das Vorschaufenster ist editierbar).
 - Beim Einfügen hat man die Wahl, den getippten Text zu **ersetzen** (Standard für Anweisungen) oder den neuen Entwurf an den Text **anzuhängen**.
@@ -94,5 +106,9 @@ Unter **Einstellungen → AI Drafts**:
   „Neu generieren“.
 - Bei aktivierter Auto-Generierung startet die Generierung direkt beim Öffnen des
   Composers — also **bevor** eigene Stichpunkte getippt wurden. Um Stichpunkte
-  einfließen zu lassen: erst tippen, dann „Neu generieren“ klicken.
+  einfließen zu lassen: erst tippen, dann „Neu generieren“ klicken (oder
+  `Strg/Cmd+Umschalt+G`). Beginnt man während der Auto-Generierung zu tippen,
+  wird sie automatisch abgebrochen.
+- Das Panel lässt sich über seine Kopfzeile einklappen; der Zustand bleibt
+  gespeichert.
 - Timeout pro Anfrage: 90 Sekunden.
