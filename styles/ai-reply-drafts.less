@@ -41,6 +41,20 @@
     font-style: italic;
   }
 
+  // Live mitlaufender Text während des Streamings
+  .ai-suggestion-stream {
+    white-space: pre-wrap;
+    line-height: 1.45;
+    background: @input-bg;
+    color: @text-color;
+    border: 1px solid @border-color-divider;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
   &.ai-error .ai-error-message {
     color: @color-error;
     margin-bottom: 8px;
