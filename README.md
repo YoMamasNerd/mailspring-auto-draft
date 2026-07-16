@@ -91,8 +91,10 @@ Unter **Einstellungen → AI Drafts**:
   stimmen; bei „Verfeinern“ geht der bisherige Vorschlag als Assistant-Nachricht in
   die Folgeanfrage.
 - Antworten streamen per SSE (`stream: true`) live ins Panel. Backends ohne
-  Streaming werden automatisch erkannt (JSON-Fallback); mit `{"stream": false}` in
-  den zusätzlichen Request-Parametern lässt sich Streaming gezielt abschalten.
+  Streaming werden automatisch erkannt (JSON-Fallback); antwortet ein Backend auf
+  die Streaming-Anfrage mit einem Fehler oder einem unlesbaren Stream, wird
+  automatisch einmal ohne Streaming nachgefragt. Mit `{"stream": false}` in den
+  zusätzlichen Request-Parametern lässt sich Streaming dauerhaft abschalten.
 - Beim Verfassen einer neuen E-Mail dient der bereits eingetippte Text als direkte Anweisung für die Generierung.
 - Der generierte Entwurf kann direkt im Panel angepasst werden (das Vorschaufenster ist editierbar).
 - Beim Einfügen hat man die Wahl, den getippten Text zu **ersetzen** (Standard für Anweisungen) oder den neuen Entwurf an den Text **anzuhängen**.
