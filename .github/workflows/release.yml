@@ -1,0 +1,31 @@
+name: Release Plugin ZIP
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-zip:
+    name: Build clean plugin ZIP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build plugin ZIP (respects .gitattributes)
+        run: |
+          mkdir -p dist
+          git archive --format=zip --output=dist/ai-reply-drafts.zip HEAD
+
+      - name: Verify ZIP contents
+        run: |
+          unzip -l dist/ai-reply-drafts.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/ai-reply-drafts.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false

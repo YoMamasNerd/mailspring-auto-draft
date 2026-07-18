@@ -1,0 +1,25 @@
+# .gitattributes
+# Steuert, was in "git archive" (GitHub Download ZIP) landet
+
+# Tests & CI - nicht im Plugin-ZIP
+/tests export-ignore
+/.github export-ignore
+/jest.config.js export-ignore
+/.eslintrc.js export-ignore
+/.prettierrc export-ignore
+
+# Doku - optional, wenn du separates INSTALL.md hast
+/README.md export-ignore
+
+# Lockfiles & Configs
+/package-lock.json export-ignore
+/yarn.lock export-ignore
+/pnpm-lock.yaml export-ignore
+
+# Editor/IDE
+/.vscode export-ignore
+/.idea export-ignore
+
+# OS
+/.DS_Store export-ignore
+/Thumbs.db export-ignore
