@@ -175,64 +175,17 @@
     }
   }
   .ai-actions {
-      margin-top: 8px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 
-    .ai-auto-cancelled-hint {
-      color: var(--ai-draft-text-subtle);
-      font-size: 0.85em;
-      margin-bottom: 8px;
-      font-style: italic;
-    }
-
-    .ai-pref-input-wrapper {
-      position: relative;
-    }
-
-    .ai-pref-validation-error {
-      color: var(--ai-draft-error);
-      font-size: 0.8em;
-      margin-top: 4px;
-      padding: 4px 8px;
-      background: rgba(255, 0, 0, 0.08);
-      border-radius: 4px;
-      border: 1px solid var(--ai-draft-error);
-      animation: ai-validation-shake 0.3s ease-out;
-    }
-
-    @keyframes ai-validation-shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-3px); }
-      75% { transform: translateX(3px); }
-    }
-
-    .ai-pref-status {
-      margin-top: 8px;
-      font-size: 0.85em;
-      padding: 6px 10px;
-      border-radius: 4px;
-      background: var(--ai-draft-input-bg);
-      border: 1px solid var(--ai-draft-border);
-
-      &.ai-pref-status-ok {
-        color: var(--ai-draft-success);
-        border-color: var(--ai-draft-success);
-        background: rgba(0, 180, 0, 0.08);
-      }
-
-      &.ai-pref-status-error {
-        color: var(--ai-draft-error);
-        border-color: var(--ai-draft-error);
-        background: rgba(255, 0, 0, 0.08);
-      }
-    }
-
-    .ai-tone-row {
-      margin: 0;
-    }
+  .ai-auto-cancelled-hint {
+    color: var(--ai-draft-text-subtle);
+    font-size: 0.85em;
+    margin-bottom: 8px;
+    font-style: italic;
   }
 
   .ai-tone-row {
@@ -360,6 +313,12 @@
   100% { transform: rotate(360deg); }
 }
 
+@keyframes ai-validation-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
 
 // Eigenes Tab-Icon: Mailsprings Bild-Cache kennt nur app-eigene Bilder
 // (icon-preferences-*.png), Plugins können dort nichts registrieren — daher
@@ -451,6 +410,21 @@
     input[type='checkbox'] {
       margin-right: 8px;
     }
+  }
+
+  .ai-pref-input-wrapper {
+    position: relative;
+  }
+
+  .ai-pref-validation-error {
+    color: var(--ai-draft-error);
+    font-size: 0.8em;
+    margin-top: 4px;
+    padding: 4px 8px;
+    background: rgba(255, 0, 0, 0.08);
+    border-radius: 4px;
+    border: 1px solid var(--ai-draft-error);
+    animation: ai-validation-shake 0.3s ease-out;
   }
 
   .ai-pref-model-row {
