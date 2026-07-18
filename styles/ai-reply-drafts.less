@@ -1,12 +1,36 @@
 @import 'ui-variables';
 
+// CSS Custom Properties für Dark/Light Theme Support
+:root {
+  --ai-draft-bg: @background-secondary;
+  --ai-draft-border: @border-color-divider;
+  --ai-draft-text: @text-color;
+  --ai-draft-text-subtle: @text-color-subtle;
+  --ai-draft-text-very-subtle: @text-color-very-subtle;
+  --ai-draft-text-heading: @text-color-heading;
+  --ai-draft-link: @text-color-link;
+  --ai-draft-input-bg: @input-bg;
+  --ai-draft-btn-bg: @background-tertiary;
+  --ai-draft-btn-hover: rgba(0, 0, 0, 0.05);
+  --ai-draft-error: @color-error;
+  --ai-draft-success: @color-success;
+  --ai-draft-shadow: rgba(0, 0, 0, 0.15);
+}
+
+// Dark mode overrides
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ai-draft-shadow: rgba(255, 255, 255, 0.1);
+  }
+}
+
 .ai-reply-drafts-panel {
   margin: 12px 0;
   padding: 8px 14px 12px;
-  border: 1px solid @border-color-divider;
+  border: 1px solid var(--ai-draft-border);
   border-radius: 6px;
-  background: @background-secondary;
-  color: @text-color;
+  background: var(--ai-draft-bg);
+  color: var(--ai-draft-text);
   font-size: 0.95em;
 
   &.ai-collapsed {
@@ -25,17 +49,17 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: @text-color-very-subtle;
+      color: var(--ai-draft-text-very-subtle);
     }
 
     .ai-panel-toggle {
-      color: @text-color-very-subtle;
+      color: var(--ai-draft-text-very-subtle);
       font-size: 0.9em;
     }
 
     &:hover .ai-panel-title,
     &:hover .ai-panel-toggle {
-      color: @text-color-subtle;
+      color: var(--ai-draft-text-subtle);
     }
   }
 
@@ -44,12 +68,12 @@
   }
 
   .ai-hint {
-    color: @text-color-very-subtle;
+    color: var(--ai-draft-text-very-subtle);
 
     a {
       cursor: pointer;
       text-decoration: underline;
-      color: @text-color-link;
+      color: var(--ai-draft-link);
     }
   }
 
@@ -63,15 +87,15 @@
     display: inline-block;
     width: 14px;
     height: 14px;
-    border: 2px solid rgba(0, 0, 0, 0.15);
-    border-left-color: @text-color-subtle;
+    border: 2px solid var(--ai-draft-shadow);
+    border-left-color: var(--ai-draft-text-subtle);
     border-radius: 50%;
     animation: ai-spin 0.8s linear infinite;
     margin-right: 8px;
   }
 
   .ai-loading-text {
-    color: @text-color-subtle;
+    color: var(--ai-draft-text-subtle);
     font-style: italic;
   }
 
@@ -79,9 +103,9 @@
   .ai-suggestion-stream {
     white-space: pre-wrap;
     line-height: 1.45;
-    background: @input-bg;
-    color: @text-color;
-    border: 1px solid @border-color-divider;
+    background: var(--ai-draft-input-bg);
+    color: var(--ai-draft-text);
+    border: 1px solid var(--ai-draft-border);
     border-radius: 6px;
     padding: 8px 10px;
     margin-bottom: 10px;
@@ -90,7 +114,7 @@
   }
 
   .ai-error-message {
-    color: @color-error;
+    color: var(--ai-draft-error);
     margin-bottom: 8px;
     white-space: pre-wrap;
     word-break: break-word;
@@ -98,32 +122,32 @@
 
   .ai-error-hint {
     font-size: 0.85em;
-    color: @text-color-very-subtle;
+    color: var(--ai-draft-text-very-subtle);
     margin-bottom: 8px;
 
     a {
       cursor: pointer;
       text-decoration: underline;
-      color: @text-color-link;
+      color: var(--ai-draft-link);
     }
   }
 
   .ai-context-info {
     font-size: 0.82em;
-    color: @text-color-very-subtle;
+    color: var(--ai-draft-text-very-subtle);
     margin-bottom: 8px;
   }
 
   .ai-subject-suggestion {
     font-size: 0.85em;
-    color: @text-color-subtle;
+    color: var(--ai-draft-text-subtle);
     margin-bottom: 8px;
   }
 
   .ai-suggestion-label {
     font-weight: 600;
     margin-bottom: 6px;
-    color: @text-color-subtle;
+    color: var(--ai-draft-text-subtle);
     font-size: 0.85em;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -138,15 +162,15 @@
     line-height: 1.45;
     font-family: inherit;
     font-size: inherit;
-    background: @input-bg;
-    color: @text-color;
-    border: 1px solid @border-color-divider;
+    background: var(--ai-draft-input-bg);
+    color: var(--ai-draft-text);
+    border: 1px solid var(--ai-draft-border);
     border-radius: 6px;
     padding: 8px 10px;
     box-sizing: border-box;
 
     &:focus {
-      border-color: @text-color-subtle;
+      border-color: var(--ai-draft-text-subtle);
       outline: none;
     }
   }
@@ -158,7 +182,7 @@
     }
 
     .ai-auto-cancelled-hint {
-      color: @text-color-subtle;
+      color: var(--ai-draft-text-subtle);
       font-size: 0.85em;
       margin-bottom: 8px;
       font-style: italic;
@@ -169,13 +193,13 @@
     }
 
     .ai-pref-validation-error {
-      color: @color-error;
+      color: var(--ai-draft-error);
       font-size: 0.8em;
       margin-top: 4px;
       padding: 4px 8px;
       background: rgba(255, 0, 0, 0.08);
       border-radius: 4px;
-      border: 1px solid @color-error;
+      border: 1px solid var(--ai-draft-error);
       animation: ai-validation-shake 0.3s ease-out;
     }
 
@@ -190,18 +214,18 @@
       font-size: 0.85em;
       padding: 6px 10px;
       border-radius: 4px;
-      background: @input-bg;
-      border: 1px solid @border-color-divider;
+      background: var(--ai-draft-input-bg);
+      border: 1px solid var(--ai-draft-border);
 
       &.ai-pref-status-ok {
-        color: @color-success;
-        border-color: @color-success;
+        color: var(--ai-draft-success);
+        border-color: var(--ai-draft-success);
         background: rgba(0, 180, 0, 0.08);
       }
 
       &.ai-pref-status-error {
-        color: @color-error;
-        border-color: @color-error;
+        color: var(--ai-draft-error);
+        border-color: var(--ai-draft-error);
         background: rgba(255, 0, 0, 0.08);
       }
     }
@@ -219,28 +243,28 @@
 
     .ai-tone-label {
       font-size: 0.85em;
-      color: @text-color-very-subtle;
+      color: var(--ai-draft-text-very-subtle);
       margin-right: 2px;
     }
 
     .ai-tone-chip {
-      border: 1px solid @border-color-divider;
+      border: 1px solid var(--ai-draft-border);
       border-radius: 999px;
       background: transparent;
-      color: @text-color-subtle;
+      color: var(--ai-draft-text-subtle);
       font-size: 0.82em;
       padding: 2px 10px;
       cursor: pointer;
 
       &:hover {
-        color: @text-color;
-        border-color: @text-color-subtle;
+        color: var(--ai-draft-text);
+        border-color: var(--ai-draft-text-subtle);
       }
 
       &.ai-tone-chip-active {
-        background: @background-tertiary;
-        color: @text-color;
-        border-color: @text-color-subtle;
+        background: var(--ai-draft-btn-bg);
+        color: var(--ai-draft-text);
+        border-color: var(--ai-draft-text-subtle);
         font-weight: 600;
       }
     }
@@ -256,15 +280,15 @@
       flex: 1;
       min-width: 0;
       padding: 6px 8px;
-      border: 1px solid @border-color-divider;
+      border: 1px solid var(--ai-draft-border);
       border-radius: 4px;
-      background: @input-bg;
-      color: @text-color;
+      background: var(--ai-draft-input-bg);
+      color: var(--ai-draft-text);
       font-family: inherit;
       font-size: inherit;
 
       &:focus {
-        border-color: @text-color-subtle;
+        border-color: var(--ai-draft-text-subtle);
         outline: none;
       }
     }
@@ -278,23 +302,23 @@
   .ai-token-usage {
     margin-top: 8px;
     padding: 6px 10px;
-    background: @background-tertiary;
-    border: 1px solid @border-color-divider;
+    background: var(--ai-draft-btn-bg);
+    border: 1px solid var(--ai-draft-border);
     border-radius: 4px;
     font-size: 0.82em;
-    color: @text-color-subtle;
+    color: var(--ai-draft-text-subtle);
     font-family: monospace;
   }
 }
 
 .btn-cancel {
-  border-color: @border-color-divider;
+  border-color: var(--ai-draft-border);
   background: transparent;
-  color: @text-color-subtle;
+  color: var(--ai-draft-text-subtle);
 
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: @text-color;
+    background: var(--ai-draft-btn-hover);
+    color: var(--ai-draft-text);
   }
 }
 
@@ -314,17 +338,17 @@
 .ai-reply-drafts-preferences {
   padding: 20px;
   max-width: 640px;
-  color: @text-color;
+  color: var(--ai-draft-text);
 
   h2 {
     margin-bottom: 16px;
-    color: @text-color-heading;
+    color: var(--ai-draft-text-heading);
 
     .ai-pref-version {
       margin-left: 8px;
       font-size: 0.55em;
       font-weight: normal;
-      color: @text-color-very-subtle;
+      color: var(--ai-draft-text-very-subtle);
       vertical-align: middle;
     }
   }
@@ -335,7 +359,7 @@
     align-items: center;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid @border-color-divider;
+    border-bottom: 1px solid var(--ai-draft-border);
   }
 
   .ai-pref-export-import {
@@ -350,7 +374,7 @@
       display: block;
       font-weight: 600;
       margin-bottom: 4px;
-      color: @text-color;
+      color: var(--ai-draft-text);
     }
 
     input[type='text'],
@@ -359,11 +383,18 @@
     select {
       width: 100%;
       padding: 6px 8px;
-      border: 1px solid @border-color-divider;
+      border: 1px solid var(--ai-draft-border);
       border-radius: 4px;
+      background: var(--ai-draft-input-bg);
+      color: var(--ai-draft-text);
       font-family: inherit;
-      background: @input-bg;
-      color: @text-color;
+      font-size: inherit;
+      box-sizing: border-box;
+
+      &:focus {
+        border-color: var(--ai-draft-text-subtle);
+        outline: none;
+      }
     }
 
     textarea {
@@ -374,55 +405,55 @@
       line-height: 1.4;
     }
 
-    .ai-pref-model-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-
-      input,
-      select {
-        flex: 1;
-        min-width: 0;
-      }
-
-      .btn {
-        flex-shrink: 0;
-      }
-    }
-
-    .ai-pref-status {
-      margin-top: 4px;
-      font-size: 0.85em;
-      color: @text-color-very-subtle;
-
-      &.ai-pref-status-ok {
-        color: @color-success;
-      }
-
-      &.ai-pref-status-error {
-        color: @color-error;
-      }
-    }
-
     .ai-pref-help {
       margin-top: 4px;
       font-size: 0.85em;
-      color: @text-color-very-subtle;
-    }
-
-    .ai-pref-validation-error {
-      margin-top: 4px;
-      font-size: 0.8em;
-      color: @color-error;
+      color: var(--ai-draft-text-very-subtle);
     }
   }
 
   .ai-pref-checkbox label {
     font-weight: normal;
 
-    input {
-      margin-right: 6px;
-      width: auto;
+    input[type='checkbox'] {
+      margin-right: 8px;
+    }
+  }
+
+  .ai-pref-model-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    input,
+    select {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .btn {
+      flex-shrink: 0;
+    }
+  }
+
+  .ai-pref-status {
+    margin-top: 8px;
+    font-size: 0.85em;
+    padding: 6px 10px;
+    border-radius: 4px;
+    background: var(--ai-draft-input-bg);
+    border: 1px solid var(--ai-draft-border);
+
+    &.ai-pref-status-ok {
+      color: var(--ai-draft-success);
+      border-color: var(--ai-draft-success);
+      background: rgba(0, 180, 0, 0.08);
+    }
+
+    &.ai-pref-status-error {
+      color: var(--ai-draft-error);
+      border-color: var(--ai-draft-error);
+      background: rgba(255, 0, 0, 0.08);
     }
   }
 }
