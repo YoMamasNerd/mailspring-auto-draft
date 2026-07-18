@@ -5,29 +5,66 @@ Generiert KI-Antwortvorschläge oder neue E-Mails über eine beliebige **OpenAI-
 
 ## Features
 
-- **Antworten**: Der Entwurf wird automatisch (optional) oder per Klick generiert und greift auf den vorherigen Verlauf (oder das Zitat) zurück. Eigene Stichpunkte oder Notizen im Antwortfeld werden als inhaltliche Vorgabe verwendet und zu vollständigen Sätzen ausformuliert.
-- **Neue E-Mails**: Gib im Composer einfach ein paar Anweisungen oder Stichpunkte ein (z. B. „Schreibe Einladung zu …“) und klicke auf **✨ KI-Entwurf generieren**, um die vollständige E-Mail schreiben zu lassen. Ist der Betreff noch leer, wird ein Betreffvorschlag mitgeneriert und beim Einfügen übernommen.
-- **Streaming**: Der Vorschlag erscheint live Wort für Wort im Panel — kein langes Warten auf die komplette Antwort, Abbrechen jederzeit möglich.
-- **Ton-Schnellwahl**: Chips für *Standard / Formell / Locker / Kurz* direkt im Panel, ohne den System-Prompt anzufassen.
-- **Verfeinern**: Änderungswunsch eintippen („kürzer“, „erwähne noch …“) — der vorhandene Vorschlag wird gezielt überarbeitet statt neu gewürfelt.
-- **Editierbar & Flexibel**: Der Entwurf kann vor dem Einfügen direkt im Composer-Panel bearbeitet werden. Existierender Text kann beim Einfügen wahlweise **ersetzt** (z. B. zum Ersetzen von Stichpunkten) oder der Entwurf **angehängt** werden.
-- **Transparenz**: Eine Statuszeile zeigt, welcher Kontext tatsächlich gesendet wurde (Verlauf mit Nachrichtenzahl, Zitat, eigene Stichpunkte).
-- **Tastenkürzel**: `Strg/Cmd+Umschalt+G` im Composer startet die Generierung (anpassbar).
-- **🔄 Auto-Updater**: Prüft täglich (konfigurierbar) GitHub Releases auf neue Versionen, lädt das ZIP herunter und zeigt Installationspfad an. Kanäle: *Stable* oder *Prerelease* (für Beta-Tester).
-- **🏥 Health-Check & Auto-Failover**: Periodischer Ping (alle 5 Min, konfigurierbar) an `/models` — bei Ausfall automatisch nächstes Fallback-Modell aus Liste probieren.
-- **🌙 Dark/Light Theme**: Automatische Erkennung via `prefers-color-scheme`, nutzt Mailspring-UI-Variablen als Defaults.
-- **↶ Undo/History**: Letzte 3 Vorschläge per ↶/↷ Buttons wiederherstellbar.
-- **⌨️ Anpassbare Shortcuts**: Tastenkürzel in Settings frei definierbar (Format: `Strg+Umschalt+G`, `Alt+Enter`, `Strg+Leertaste` …), Tooltip im Panel.
-- **💾 Export/Import Config**: JSON-Backup aller Settings (ohne API-Key), Import mit Validierung gegen erlaubte Keys.
-- **💰 Token-Counter & Cost-Estimate**: Live-Anzeige pro Draft (≈ Tokens · ≈ $), Preise für gängige Modelle hinterlegt, lokale/gratis Modelle = 0.
-- **📎 Attachment RAG**: PDF-Text (via pdf.js) & Bilder (Base64) aus Anhängen an Modell senden (benötigt multimodales Modell, max 5 MB/Anhang, max 3 Anhänge).
-- **⚡ Model Caching**: `/models`-Liste wird 1h im localStorage gecacht (Key isoliert pro Provider+BaseURL), Force-Refresh per Button.
-- **✅ Config Validation**: Live-Validierung (500ms Debounce) bei URL/JSON/Modell mit rotem Rand & Fehlermeldung, Tooltips via `title`, „Verbindung testen“-Button prüft kompletten Pfad (URL + Key + `/models`).
+| Kategorie | Features |
+|---|---|
+| **Kernfunktionen** | Antworten & neue E-Mails generieren, Streaming live im Panel, Betreffvorschlag bei neuen Mails |
+| **Ton & Stil** | Chips für *Standard / Formell / Locker / Kurz* direkt im Panel |
+| **Verfeinern** | Änderungswunsch eintippen („kürzer“, „erwähne noch …“) → gezielte Überarbeitung statt Neuwürfeln |
+| **Flexibilität** | Entwurf vor Einfügen editierbar, **Ersetzen** (für Stichpunkte) oder **Anhängen** wählbar |
+| **Transparenz** | Statuszeile: welcher Kontext gesendet wurde (Verlauf-Anzahl, Zitat, eigene Stichpunkte) |
+| **Tastenkürzel** | `Strg/Cmd+Umschalt+G` (anpassbar in Settings) |
+
+### 🔄 Auto-Updater
+- Prüft täglich (konfigurierbar) GitHub Releases auf neue Versionen
+- Button „Jetzt auf Updates prüfen“ in den Einstellungen
+- Nach Download: Mailspring neu starten → ZIP manuell installieren
+- Kanäle: **Stable** oder **Prerelease** (für Beta-Tester)
+
+### 🏥 Health-Check & Auto-Failover
+- Periodischer Ping (alle 5 Min, konfigurierbar) an `/models` — **keine Token-Kosten**
+- Bei Verbindungsfehler: nächstes Fallback-Modell aus Liste automatisch probieren
+- Status-Indikator im Panel: 🟢 verbunden / 🔴 Fehler / 🟡 prüft…
+
+### 🌙 Dark/Light Theme Auto-Detection
+- CSS Custom Properties für alle Farben
+- Nutzt Mailspring-UI-Variablen als Defaults
+- `@media (prefers-color-scheme: dark)` Override für echten Dark Mode
+
+### ↶ Undo/History (3 Vorschläge)
+- Letzte 3 generierten Vorschläge per ↶/↷ Buttons im Panel wiederherstellbar
+
+### ⌨️ Anpassbare Keyboard Shortcuts
+- Default: `Strg+Umschalt+G`
+- In Settings frei definierbar (Format: `Strg+Umschalt+G`, `Alt+Enter`, `Strg+Leertaste` …)
+- Tooltip im Panel zeigt aktuelles Kürzel (Mac: ⌘, Win/Linux: Strg)
+
+### 💾 Export/Import Config
+- JSON-Backup aller Settings (ohne API-Key)
+- Import validiert gegen erlaubte Keys
+
+### 💰 Token-Counter & Cost-Estimate
+- Live-Anzeige pro Draft: `≈ 1.2k Tokens · ≈ $0.0004`
+- Preise für OpenAI, Anthropic, Google, DeepSeek, kostenlose Modelle ($0) hinterlegt
+- Lokale/gratis Modelle = 0
+
+### 📎 Attachment RAG
+- PDF-Text (via pdf.js) & Bilder (Base64) aus Composer-Anhängen als Kontext mitsenden
+- Checkbox in Settings, max 5 MB/Anhang, max 3 Anhänge
+- Benötigt multimodales Modell (GPT-4o, Claude, LLaVA, …)
+
+### ⚡ Model Caching
+- `/models`-Liste wird 1h im localStorage gecacht
+- Key isoliert pro Provider+BaseURL
+- Force-Refresh per „Modelle laden“-Button
+
+### ✅ Config Validation
+- Live-Validierung (500ms Debounce) bei URL/JSON/Modell
+- Roter Rand + Fehlermeldung, Tooltips via `title`
+- „Verbindung testen“-Button prüft kompletten Pfad (URL + Key + `/models`)
 
 ## Installation
 
 **Variante A — über die Oberfläche:**
-
 1. Mailspring öffnen → **Einstellungen → Plugins → Install Plugin…**
 2. Diesen Ordner (`mailspring-auto-draft`) auswählen.
 
@@ -51,8 +88,7 @@ mkdir -Force "$env:APPDATA\Mailspring\packages\ai-reply-drafts"
 Copy-Item -Recurse -Force * "$env:APPDATA\Mailspring\packages\ai-reply-drafts"
 ```
 
-Danach Mailspring neu starten.
-Es ist kein Build-Schritt nötig — der Ordner kann 1:1 kopiert werden.
+Danach Mailspring neu starten. Es ist kein Build-Schritt nötig — der Ordner kann 1:1 kopiert werden.
 
 ## Konfiguration
 
@@ -109,3 +145,9 @@ Unter **Einstellungen → AI Drafts**:
 - Das Panel lässt sich über seine Kopfzeile einklappen; der Zustand bleibt gespeichert.
 - Timeout pro Anfrage: 90 Sekunden.
 - **Auto-Update**: Nach Download des ZIPs muss Mailspring neu gestartet und das ZIP manuell über „Install Plugin“ installiert werden (Mailspring unterstützt kein Hot-Reload).
+
+## Release-Infos
+
+- **Aktuelles Pre-Release**: [v0.4.0-prerelease](https://github.com/YoMamasNerd/mailspring-auto-draft/releases/tag/v0.4.0-prerelease)
+- **Changelog**: [GitHub Releases](https://github.com/YoMamasNerd/mailspring-auto-draft/releases)
+- **Plugin-ZIP** enthält nur Runtime-Files (`lib/`, `styles/`, `package.json`, `LICENSE`) — Tests, `.github/`, Config-Files sind via `.gitattributes export-ignore` ausgeklammert.
