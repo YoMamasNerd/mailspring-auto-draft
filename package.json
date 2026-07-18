@@ -5,6 +5,9 @@
   "title": "AI Reply Drafts",
   "description": "Generiert KI-E-Mail-Entwürfe über eine OpenAI-kompatible API — mit Streaming, Ton-Schnellwahl, Verfeinerung und Betreffvorschlägen.",
   "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
   "engines": {
     "mailspring": "*"
   },

@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  smoke:
+    name: Smoke tests & checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Syntax check (lib)
+        run: |
+          for f in lib/*.js; do node --check "$f"; done
+
+      - name: Smoke tests
+        run: node --test tests/*.test.js
+
+      - name: LESS compile check
+        run: |
+          npm install --no-save --no-package-lock less@4 > /dev/null
+          mkdir -p /tmp/lesscheck
+          cat > /tmp/lesscheck/ui-variables.less <<'EOF'
+          @background-secondary: #fff;
+          @background-tertiary: #eee;
+          @border-color-divider: #ccc;
+          @text-color: #000;
+          @text-color-subtle: #333;
+          @text-color-very-subtle: #666;
+          @text-color-heading: #000;
+          @text-color-link: #00f;
+          @input-bg: #fff;
+          @color-error: #f00;
+          @color-success: #0a0;
+          EOF
+          ./node_modules/.bin/lessc --include-path=/tmp/lesscheck styles/ai-reply-drafts.less /dev/null
+          echo "LESS OK"

@@ -26,6 +26,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Release-Gate: eine Version mit kaputten Kernpfaden darf kein ZIP werden.
+      - name: Smoke tests
+        run: node --test tests/*.test.js
+
       - name: Build plugin ZIP (respects .gitattributes)
         run: |
           mkdir -p dist

@@ -32,9 +32,14 @@ mailspring-auto-draft/
 │   └── ...
 ├── styles/
 │   └── ai-reply-drafts.less # CSS Custom Properties + Dark/Light auto-detect
+├── tests/                   # Smoke tests (node --test, zero deps) — export-ignored
+│   ├── smoke.test.js        # Load-, API-, Streaming-, Cache-, Failover-, Updater-Pfade
+│   ├── helpers/bootstrap.js # AppEnv/localStorage-Globals + fetch-Response-Builder
+│   └── stubs/mailspring-exports.js  # Minimaler Mailspring-API-Stub
 ├── package.json             # name, version, main, windowTypes, engines
 ├── .gitattributes           # export-ignore for tests/.github/*.md → clean Release ZIP
-└── .github/workflows/release.yml  # Tag push → git archive → GitHub Release asset
+├── .github/workflows/release.yml  # Tag push / manual dispatch → tests → ZIP → Release asset
+└── .github/workflows/test.yml     # Push/PR → syntax check + smoke tests + LESS compile
 ```
 
 **Data flow (reply generation):**
@@ -66,8 +71,9 @@ git tag v0.4.1 && git push origin v0.4.1
 # → GitHub Actions builds clean ZIP (respects .gitattributes) → creates Release asset
 ```
 
-### Lint / Syntax check
+### Tests / Lint
 ```bash
+node --test tests/*.test.js    # Smoke tests (no dependencies needed)
 node --check lib/*.js          # Quick syntax check
 # No formal linter configured (Mailspring doesn't ship one)
 ```
@@ -94,7 +100,12 @@ node --check lib/*.js          # Quick syntax check
 
 ## Testing Instructions
 
-**No automated test suite exists.** Manual verification checklist:
+**Automated smoke tests** live in `tests/` and run with `node --test tests/*.test.js`
+(zero dependencies; Mailspring APIs are stubbed via `tests/stubs/mailspring-exports.js`).
+They cover module loading, the `generateReply` contract (`{ text, usage }`), SSE streaming +
+non-stream retry, model cache/forceRefresh, failover restore, and the updater. CI runs them
+on every push (`test.yml`) and before every release ZIP (`release.yml`). **Run them after
+every change to `lib/`.** UI behavior still needs manual verification:
 
 | Scenario | How to test |
 |---|---|
@@ -123,7 +134,7 @@ node --check lib/*.js          # Quick syntax check
 - **User data**: Thread context & drafts sent to configured backend only
 - **Attachments**: Only filename + MIME type go into the prompt (Mailspring keeps no file content in memory); max 5 MB × 3, filtered by MIME (`image/*`, `pdf`, `text/*`, `application/json`, `xml`). Content-level RAG runs backend-side (e.g. via `extraParams.files`)
 - **No telemetry** — no external calls except configured backend + GitHub Releases API (updater)
-- **Files to never touch**: `.github/`, `tests/` (not in repo), `.gitattributes`, `package-lock.json` (not committed)
+- **Files to touch only when explicitly asked**: `.github/`, `.gitattributes`, `package-lock.json` (not committed). `tests/` may be extended alongside code changes, but never deleted or weakened to make a change pass
 
 ---
 
