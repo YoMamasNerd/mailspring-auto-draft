@@ -10,6 +10,7 @@
 
 # Doku - optional, wenn du separates INSTALL.md hast
 /README.md export-ignore
+/AGENTS.md export-ignore
 
 # Lockfiles & Configs
 /package-lock.json export-ignore

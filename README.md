@@ -47,10 +47,9 @@ Generiert KI-Antwortvorschläge oder neue E-Mails über eine beliebige **OpenAI-
 - Preise für OpenAI, Anthropic, Google, DeepSeek, kostenlose Modelle ($0) hinterlegt
 - Lokale/gratis Modelle = 0
 
-### 📎 Attachment RAG
-- PDF-Text (via pdf.js) & Bilder (Base64) aus Composer-Anhängen als Kontext mitsenden
-- Checkbox in Settings, max 5 MB/Anhang, max 3 Anhänge
-- Benötigt multimodales Modell (GPT-4o, Claude, LLaVA, …)
+### 📎 Attachment-Kontext
+- Dateiname & Typ der Composer-Anhänge werden als Kontext mitgesendet (max 5 MB/Anhang, max 3 Anhänge)
+- Checkbox in Settings; inhaltliche RAG-Anbindung läuft backend-seitig (z.B. Open WebUI `files` über die zusätzlichen Request-Parameter)
 
 ### ⚡ Model Caching
 - `/models`-Liste wird 1h im localStorage gecacht

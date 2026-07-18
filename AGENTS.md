@@ -107,7 +107,7 @@ node --check lib/*.js          # Quick syntax check
 | **Shortcut** | `Strg+Umschalt+G` in composer → generates |
 | **Tone chips** | Click Formell/Locker/Kurz → regenerates with tone |
 | **Refine** | Type "kürzer" in refine input → click Überarbeiten → targeted rewrite |
-| **Attachment RAG** | Enable checkbox → attach PDF/image → generate → "N Anhänge als Kontext genutzt" |
+| **Attachment RAG** | Enable checkbox → attach PDF/image → generate → prompt contains "Anhänge der E-Mail (N als Kontext genutzt)" with filenames |
 | **Health check** | Enable Health-Check → wait 5 min or click "Jetzt prüfen" → 🟢/🔴 indicator |
 | **Failover** | Enable Failover + add fallbacks → kill backend → auto-switches model |
 | **Export/Import** | Export → edit JSON → Import → settings restored |
@@ -121,7 +121,7 @@ node --check lib/*.js          # Quick syntax check
 - **API Key storage**: Plaintext in Mailspring `config.json` (same as all plugins) — warn users in README
 - **Secrets in code**: Never commit API keys; `.gitignore` covers local config
 - **User data**: Thread context & drafts sent to configured backend only
-- **Attachments**: Base64-encoded in memory only, max 5 MB × 3, filtered by MIME (`pdf`, `text/*`, `application/json`, `xml`)
+- **Attachments**: Only filename + MIME type go into the prompt (Mailspring keeps no file content in memory); max 5 MB × 3, filtered by MIME (`image/*`, `pdf`, `text/*`, `application/json`, `xml`). Content-level RAG runs backend-side (e.g. via `extraParams.files`)
 - **No telemetry** — no external calls except configured backend + GitHub Releases API (updater)
 - **Files to never touch**: `.github/`, `tests/` (not in repo), `.gitattributes`, `package-lock.json` (not committed)
 
@@ -162,7 +162,7 @@ node --check lib/*.js          # Quick syntax check
 | `AppEnv.config.get` returns `undefined` | Setting not persisted | Always provide `DEFAULTS[key]` fallback in `getConfig()` |
 | Streaming never resolves | Panel stuck on "Generiere…" | Ensure `onToken` called at least once; fallback to non-streaming after error |
 | Model dropdown empty | "Modelle laden" shows 0 | Backend must return `/models` with `data[]` or `models[]` array |
-| Health-check spams | 10s timeout fires repeatedly | Respect `healthCheckInterval` (default 5 min); guard with `autoUpdateEnabled` |
+| Health-check spams | 10s timeout fires repeatedly | Respect `healthCheckInterval` (default 5 min); guard with `healthCheckEnabled` |
 | Failover loops | Switches model endlessly | Only try each fallback **once** per health-check cycle |
 | Theme flashes | White panel in dark mode | CSS vars must have `@media (prefers-color-scheme: dark)` override |
 | Undo loses suggestion | ↶ does nothing | Push to `suggestionHistory` **before** generating new one |
