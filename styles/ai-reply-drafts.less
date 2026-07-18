@@ -164,6 +164,48 @@
       font-style: italic;
     }
 
+    .ai-pref-input-wrapper {
+      position: relative;
+    }
+
+    .ai-pref-validation-error {
+      color: @color-error;
+      font-size: 0.8em;
+      margin-top: 4px;
+      padding: 4px 8px;
+      background: rgba(255, 0, 0, 0.08);
+      border-radius: 4px;
+      border: 1px solid @color-error;
+      animation: ai-validation-shake 0.3s ease-out;
+    }
+
+    @keyframes ai-validation-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
+    .ai-pref-status {
+      margin-top: 8px;
+      font-size: 0.85em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      background: @input-bg;
+      border: 1px solid @border-color-divider;
+
+      &.ai-pref-status-ok {
+        color: @color-success;
+        border-color: @color-success;
+        background: rgba(0, 180, 0, 0.08);
+      }
+
+      &.ai-pref-status-error {
+        color: @color-error;
+        border-color: @color-error;
+        background: rgba(255, 0, 0, 0.08);
+      }
+    }
+
     .ai-tone-row {
       margin: 0;
     }
@@ -341,6 +383,12 @@
       margin-top: 4px;
       font-size: 0.85em;
       color: @text-color-very-subtle;
+    }
+
+    .ai-pref-validation-error {
+      margin-top: 4px;
+      font-size: 0.8em;
+      color: @color-error;
     }
   }
 
