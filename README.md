@@ -147,6 +147,6 @@ Unter **Einstellungen → AI Drafts**:
 
 ## Release-Infos
 
-- **Aktuelles Pre-Release**: [v0.4.0-prerelease](https://github.com/YoMamasNerd/mailspring-auto-draft/releases/tag/v0.4.0-prerelease)
+- **Aktuelles Release**: [v0.4.0](https://github.com/YoMamasNerd/mailspring-auto-draft/releases/tag/v0.4.0)
 - **Changelog**: [GitHub Releases](https://github.com/YoMamasNerd/mailspring-auto-draft/releases)
 - **Plugin-ZIP** enthält nur Runtime-Files (`lib/`, `styles/`, `package.json`, `LICENSE`) — Tests, `.github/`, Config-Files sind via `.gitattributes export-ignore` ausgeklammert.

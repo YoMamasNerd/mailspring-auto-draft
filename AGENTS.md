@@ -200,7 +200,7 @@ node --check lib/*.js          # Quick syntax check
 
 ## Version & Changelog
 
-- **Current**: `0.4.0-prerelease` (see `package.json`)
+- **Current**: `0.4.0` (see `package.json`)
 - **Release tags**: `v*` → GitHub Actions builds clean ZIP → Release asset
 - **Changelog**: Auto-generated from commit subjects (Conventional Commits)
 
