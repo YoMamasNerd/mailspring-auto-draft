@@ -28,4 +28,4 @@ jobs:
           files: dist/ai-reply-drafts.zip
           generate_release_notes: true
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref, 'prerelease') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
