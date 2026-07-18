@@ -309,6 +309,39 @@
     color: var(--ai-draft-text-subtle);
     font-family: monospace;
   }
+
+  // Health Status Indikator
+  .ai-health-status {
+    margin-top: 8px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.82em;
+    font-weight: 500;
+
+    &.ai-health-healthy {
+      color: var(--ai-draft-success);
+      background: rgba(0, 180, 0, 0.1);
+      border: 1px solid var(--ai-draft-success);
+    }
+
+    &.ai-health-unhealthy {
+      color: var(--ai-draft-error);
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid var(--ai-draft-error);
+    }
+
+    &.ai-health-checking {
+      color: var(--ai-draft-text-subtle);
+      background: rgba(255, 170, 0, 0.1);
+      border: 1px solid #ffaa00;
+    }
+
+    &.ai-health-failover {
+      color: var(--ai-draft-success);
+      background: rgba(0, 180, 0, 0.1);
+      border: 1px solid var(--ai-draft-success);
+    }
+  }
 }
 
 .btn-cancel {
