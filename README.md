@@ -144,10 +144,11 @@ Unter **Einstellungen → AI Drafts**:
 - Das Panel lässt sich über seine Kopfzeile einklappen; der Zustand bleibt gespeichert.
 - Timeout pro Anfrage: 90 Sekunden.
 - **„Cannot POST /chat/completions“ / 404**: Die Basis-URL zeigt nicht auf den OpenAI-kompatiblen Teil des Backends. Das Plugin probiert die üblichen Pfad-Varianten (`/v1`, `/api/v1/openai`, …) automatisch durch; schlägt auch das fehl, nennt die Fehlermeldung die geprüften URLs.
+- **AnythingLLM: „API-Fehler 500 … keine Details vom Backend“**: Der Fehler passiert im AnythingLLM-Server selbst (Details nur in dessen Server-Logs, z.B. `docker logs`). Das Plugin weicht in diesem Fall automatisch auf die native Workspace-Chat-API (`/api/v1/workspace/<slug>/stream-chat`) aus, die einen anderen Code-Pfad nutzt — die Generierung funktioniert dann trotzdem.
 - **Auto-Update**: Nach Download des ZIPs muss Mailspring neu gestartet und das ZIP manuell über „Install Plugin“ installiert werden (Mailspring unterstützt kein Hot-Reload).
 
 ## Release-Infos
 
-- **Aktuelles Release**: [v0.4.1](https://github.com/YoMamasNerd/mailspring-auto-draft/releases/tag/v0.4.1)
+- **Aktuelles Release**: [v0.4.2](https://github.com/YoMamasNerd/mailspring-auto-draft/releases/tag/v0.4.2)
 - **Changelog**: [GitHub Releases](https://github.com/YoMamasNerd/mailspring-auto-draft/releases)
 - **Plugin-ZIP** enthält nur Runtime-Files (`lib/`, `styles/`, `package.json`, `LICENSE`) — Tests, `.github/`, Config-Files sind via `.gitattributes export-ignore` ausgeklammert.

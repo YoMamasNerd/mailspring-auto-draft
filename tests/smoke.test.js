@@ -251,6 +251,95 @@ test('generateReply: 404 auf /chat/completions stößt Pfad-Erkennung an', async
   ]);
 });
 
+test('generateReply: 500 vom OpenAI-Endpunkt → Fallback auf native AnythingLLM-API (Streaming)', async () => {
+  reset({ baseUrl: 'http://localhost:3001/api/v1/openai', model: 'arbeit' });
+  const postUrls = [];
+  global.fetch = async (url, opts = {}) => {
+    if (opts.method === 'POST') postUrls.push(url);
+    if (url.endsWith('/v1/workspace/arbeit/stream-chat')) {
+      return sseResponse([
+        JSON.stringify({ type: 'textResponseChunk', textResponse: 'Hallo ', close: false }),
+        JSON.stringify({ type: 'textResponseChunk', textResponse: 'Welt', close: true }),
+      ]);
+    }
+    // OpenAI-kompatibler Endpunkt: 500 mit leerem Body (AnythingLLM-typisch)
+    return {
+      ok: false,
+      status: 500,
+      statusText: '',
+      headers: { get: () => 'application/json' },
+      text: async () => '',
+    };
+  };
+
+  const partials = [];
+  const result = await AIService.generateReply({
+    subject: 'Test',
+    recipient: 'a@b.de',
+    quotedText: 'Original',
+    userText: '',
+    isReply: true,
+    onToken: (text) => partials.push(text),
+  });
+
+  assert.equal(result.text, 'Hallo Welt');
+  assert.ok(partials.includes('Hallo Welt'));
+  assert.deepEqual(postUrls, [
+    'http://localhost:3001/api/v1/openai/chat/completions',
+    'http://localhost:3001/api/v1/openai/chat/completions',
+    'http://localhost:3001/api/v1/workspace/arbeit/stream-chat',
+  ]);
+});
+
+test('generateReply: nativer AnythingLLM-Fallback ohne Streaming (extraParams stream:false)', async () => {
+  reset({
+    baseUrl: 'http://localhost:3001/api/v1/openai',
+    model: 'arbeit',
+    extraParams: '{"stream": false}',
+  });
+  const postUrls = [];
+  global.fetch = async (url, opts = {}) => {
+    if (opts.method === 'POST') postUrls.push(url);
+    if (url.endsWith('/v1/workspace/arbeit/stream-chat')) {
+      return sseResponse([
+        JSON.stringify({ type: 'textResponseChunk', textResponse: 'Aus nativer API', close: true }),
+      ]);
+    }
+    if (url.endsWith('/v1/workspace/arbeit/chat')) {
+      return jsonResponse({
+        id: 'x',
+        type: 'textResponse',
+        textResponse: 'Aus nativer API',
+        close: true,
+        error: null,
+      });
+    }
+    return {
+      ok: false,
+      status: 500,
+      statusText: '',
+      headers: { get: () => 'application/json' },
+      text: async () => '',
+    };
+  };
+
+  const result = await AIService.generateReply({
+    subject: 'Test',
+    recipient: 'a@b.de',
+    quotedText: 'Original',
+    userText: '',
+    isReply: true,
+    onToken: (text) => {},
+  });
+
+  assert.equal(result.text, 'Aus nativer API');
+  assert.equal(postUrls[0], 'http://localhost:3001/api/v1/openai/chat/completions');
+  assert.ok(
+    postUrls[1].includes('/v1/workspace/arbeit/'),
+    'zweiter Request muss an die native Workspace-API gehen'
+  );
+});
+
 test('runPeriodicHealthCheck: Modell wird nach erfolglosem Failover wiederhergestellt', async () => {
   reset({
     ...BASE_CONFIG,

@@ -181,6 +181,7 @@ every change to `lib/`.** UI behavior still needs manual verification:
 | Release ZIP bloated | 500 KB+ with tests | `.gitattributes export-ignore` for `.github/`, `tests/`, `*.md` (except LICENSE) |
 | 404 on `/chat/completions` | "Cannot POST …" (e.g. AnythingLLM) | Base URL misses the OpenAI-compat path part; `listModels`/`generateReply` auto-probe `BASE_URL_SUFFIXES` (`/v1`, `/api/v1/openai`, …) and cache the resolved base per session |
 | AnythingLLM 401 on generate | Key valid, models load fine | `model` must be the **workspace slug** (from `/models` dropdown), not the display name |
+| AnythingLLM 500, empty body | Exception inside its OpenAI-compat layer (`response.status(500).end()`) | `generateReply` falls back to the native workspace chat API (`{root}/v1/workspace/{slug}/(stream-)chat`, single flattened `message`); real cause only in AnythingLLM server logs |
 
 ---
 
@@ -213,7 +214,7 @@ every change to `lib/`.** UI behavior still needs manual verification:
 
 ## Version & Changelog
 
-- **Current**: `0.4.1` (see `package.json`)
+- **Current**: `0.4.2` (see `package.json`)
 - **Release tags**: `v*` → GitHub Actions builds clean ZIP → Release asset
 - **Changelog**: Auto-generated from commit subjects (Conventional Commits)
 
