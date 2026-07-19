@@ -114,9 +114,9 @@ Unter **Einstellungen → AI Drafts**:
 
 - **Am Modell verknüpft**: nichts weiter nötig — Modell im Dropdown wählen, fertig.
 - **AnythingLLM (empfohlen für Windows, ohne Docker)**: Desktop-App installieren, Workspace anlegen, Dokumente hochladen. Dann in den Plugin-Einstellungen:
-  - Basis-URL: `http://localhost:3001/api/v1/openai`
-  - API-Key: *** AnythingLLM unter Einstellungen → Developer-API erzeugen
-  - Modell: jeder Workspace erscheint als eigenes „Modell“ im Dropdown
+  - Basis-URL: `http://localhost:3001/api/v1/openai` (unvollständige Angaben wie `http://localhost:3001` korrigiert das Plugin automatisch, sobald es 404 erhält)
+  - API-Key: in AnythingLLM unter Einstellungen → Developer-API erzeugen (**Pflicht**, sonst 401/403)
+  - Modell: jeder Workspace erscheint als eigenes „Modell“ im Dropdown — der Wert ist der **Workspace-Slug**; ein frei getippter Anzeigename führt zu einem 401-Fehler bei der Generierung
 - **Open WebUI**: Basis-URL `http://localhost:3000/api`, API-Key unter Einstellungen → Konto. Wissen entweder an ein eigenes Modell hängen (Workspace → Modelle) oder als zusätzliche Request-Parameter:
   ```json
   {"files": [{"type": "collection", "id": "DEINE-COLLECTION-ID"}]}
@@ -143,6 +143,7 @@ Unter **Einstellungen → AI Drafts**:
 - Bei aktivierter Auto-Generierung startet die Generierung direkt beim Öffnen des Composers — also **bevor** eigene Stichpunkte getippt wurden. Um Stichpunkte einfließen zu lassen: erst tippen, dann „Neu generieren“ klicken (oder `Strg/Cmd+Umschalt+G`). Beginnt man während der Auto-Generierung zu tippen, wird sie automatisch abgebrochen.
 - Das Panel lässt sich über seine Kopfzeile einklappen; der Zustand bleibt gespeichert.
 - Timeout pro Anfrage: 90 Sekunden.
+- **„Cannot POST /chat/completions“ / 404**: Die Basis-URL zeigt nicht auf den OpenAI-kompatiblen Teil des Backends. Das Plugin probiert die üblichen Pfad-Varianten (`/v1`, `/api/v1/openai`, …) automatisch durch; schlägt auch das fehl, nennt die Fehlermeldung die geprüften URLs.
 - **Auto-Update**: Nach Download des ZIPs muss Mailspring neu gestartet und das ZIP manuell über „Install Plugin“ installiert werden (Mailspring unterstützt kein Hot-Reload).
 
 ## Release-Infos

@@ -14,8 +14,14 @@ const BASE_CONFIG = {
   model: 'test-model',
 };
 
+// Setzt Config UND den Modul-Zustand (Model-Cache, aufgelöste Basis-URL) zurück.
+function reset(values = {}) {
+  resetConfig(values);
+  AIService.invalidateModelCache();
+}
+
 test('alle lib-Module laden ohne Fehler', () => {
-  resetConfig();
+  reset();
   // Ein ReferenceError beim require() würde das gesamte Plugin lahmlegen.
   assert.ok(require('../lib/ai-service'));
   assert.ok(require('../lib/text-utils'));
@@ -55,7 +61,7 @@ test('splitSubject trennt Betreffvorschlag vom Text', () => {
 });
 
 test('generateReply (JSON-Backend): liefert { text, usage } und filtert Anhänge', async () => {
-  resetConfig({ ...BASE_CONFIG, includeAttachments: true });
+  reset({ ...BASE_CONFIG, includeAttachments: true });
   let requestBody = null;
   global.fetch = async (url, opts = {}) => {
     requestBody = JSON.parse(opts.body);
@@ -92,7 +98,7 @@ test('generateReply (JSON-Backend): liefert { text, usage } und filtert Anhänge
 });
 
 test('generateReply (SSE-Streaming): setzt Tokens zusammen und schätzt usage', async () => {
-  resetConfig(BASE_CONFIG);
+  reset(BASE_CONFIG);
   global.fetch = async () =>
     sseResponse([
       JSON.stringify({ choices: [{ delta: { content: 'Hallo ' } }] }),
@@ -118,7 +124,7 @@ test('generateReply (SSE-Streaming): setzt Tokens zusammen und schätzt usage', 
 });
 
 test('generateReply: Retry ohne Streaming nach API-Fehler', async () => {
-  resetConfig(BASE_CONFIG);
+  reset(BASE_CONFIG);
   const bodies = [];
   let call = 0;
   global.fetch = async (url, opts = {}) => {
@@ -151,7 +157,7 @@ test('generateReply: Retry ohne Streaming nach API-Fehler', async () => {
 });
 
 test('listModels: Cache greift, forceRefresh umgeht ihn', async () => {
-  resetConfig(BASE_CONFIG);
+  reset(BASE_CONFIG);
   let calls = 0;
   global.fetch = async () => {
     calls++;
@@ -166,13 +172,87 @@ test('listModels: Cache greift, forceRefresh umgeht ihn', async () => {
 });
 
 test('listModels: leere Modell-Liste ist ein Fehler', async () => {
-  resetConfig(BASE_CONFIG);
+  reset(BASE_CONFIG);
   global.fetch = async () => jsonResponse({ data: [] });
   await assert.rejects(() => AIService.listModels(true), /keine Modelle/);
 });
 
+test('listModels: erkennt AnythingLLM-Basis-URL ohne /api/v1/openai automatisch', async () => {
+  reset({ baseUrl: 'http://localhost:3001', model: 'my-workspace' });
+  const requestedUrls = [];
+  global.fetch = async (url) => {
+    requestedUrls.push(url);
+    if (url === 'http://localhost:3001/api/v1/openai/models') {
+      return jsonResponse({ data: [{ id: 'my-workspace' }] });
+    }
+    return {
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+      headers: { get: () => 'text/html' },
+      text: async () => 'Cannot GET /models',
+    };
+  };
+
+  const models = await AIService.listModels(true);
+  assert.deepEqual(models, ['my-workspace']);
+  assert.ok(requestedUrls.includes('http://localhost:3001/models'), 'Basis selbst wird zuerst probiert');
+
+  // Folge-Requests (auch chat/completions) müssen die erkannte Basis nutzen.
+  requestedUrls.length = 0;
+  global.fetch = async (url, opts = {}) => {
+    requestedUrls.push(url);
+    return jsonResponse({ choices: [{ message: { content: 'Antwort aus dem Workspace' } }] });
+  };
+  const result = await AIService.generateReply({
+    subject: 'Test',
+    recipient: 'a@b.de',
+    quotedText: 'Original',
+    userText: '',
+    isReply: true,
+  });
+  assert.equal(result.text, 'Antwort aus dem Workspace');
+  assert.equal(requestedUrls[0], 'http://localhost:3001/api/v1/openai/chat/completions');
+});
+
+test('generateReply: 404 auf /chat/completions stößt Pfad-Erkennung an', async () => {
+  reset({ baseUrl: 'http://localhost:3001', model: 'my-workspace' });
+  const postUrls = [];
+  global.fetch = async (url, opts = {}) => {
+    const isPost = opts.method === 'POST';
+    if (isPost) postUrls.push(url);
+    if (url === 'http://localhost:3001/api/v1/openai/models') {
+      return jsonResponse({ data: [{ id: 'my-workspace' }] });
+    }
+    if (url === 'http://localhost:3001/api/v1/openai/chat/completions') {
+      return jsonResponse({ choices: [{ message: { content: 'Antwort nach Auto-Korrektur' } }] });
+    }
+    return {
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+      headers: { get: () => 'text/html' },
+      text: async () => `Cannot ${isPost ? 'POST' : 'GET'} ${url}`,
+    };
+  };
+
+  const result = await AIService.generateReply({
+    subject: 'Test',
+    recipient: 'a@b.de',
+    quotedText: 'Original',
+    userText: '',
+    isReply: true,
+  });
+
+  assert.equal(result.text, 'Antwort nach Auto-Korrektur');
+  assert.deepEqual(postUrls, [
+    'http://localhost:3001/chat/completions',
+    'http://localhost:3001/api/v1/openai/chat/completions',
+  ]);
+});
+
 test('runPeriodicHealthCheck: Modell wird nach erfolglosem Failover wiederhergestellt', async () => {
-  resetConfig({
+  reset({
     ...BASE_CONFIG,
     model: 'haupt-modell',
     healthCheckEnabled: true,
@@ -190,7 +270,7 @@ test('runPeriodicHealthCheck: Modell wird nach erfolglosem Failover wiederherges
 });
 
 test('checkForUpdates: findet neue stabile Version, ignoriert Prerelease auf stable-Kanal', async () => {
-  resetConfig({ ...BASE_CONFIG, autoUpdateEnabled: true, autoUpdateChannel: 'stable' });
+  reset({ ...BASE_CONFIG, autoUpdateEnabled: true, autoUpdateChannel: 'stable' });
   global.fetch = async () =>
     jsonResponse([
       {
@@ -220,7 +300,7 @@ test('checkForUpdates: findet neue stabile Version, ignoriert Prerelease auf sta
 });
 
 test('checkForUpdates: aktuelle Version → kein Update', async () => {
-  resetConfig({ ...BASE_CONFIG, autoUpdateEnabled: true, autoUpdateChannel: 'stable' });
+  reset({ ...BASE_CONFIG, autoUpdateEnabled: true, autoUpdateChannel: 'stable' });
   global.fetch = async () =>
     jsonResponse([
       { tag_name: 'v0.0.1', prerelease: false, draft: false, assets: [], body: '', html_url: '', published_at: '' },
@@ -232,7 +312,7 @@ test('checkForUpdates: aktuelle Version → kein Update', async () => {
 });
 
 test('parsedExtraParams via generateReply: ungültiges JSON wird klar gemeldet', async () => {
-  resetConfig({ ...BASE_CONFIG, extraParams: '{kaputt' });
+  reset({ ...BASE_CONFIG, extraParams: '{kaputt' });
   await assert.rejects(
     () =>
       AIService.generateReply({

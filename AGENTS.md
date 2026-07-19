@@ -179,6 +179,8 @@ every change to `lib/`.** UI behavior still needs manual verification:
 | Undo loses suggestion | ↶ does nothing | Push to `suggestionHistory` **before** generating new one |
 | Shortcut not working | `Strg+Shift+G` ignored | Parser must handle `Strg`/`Control`/`Meta` + `Umschalt`/`Shift` + key |
 | Release ZIP bloated | 500 KB+ with tests | `.gitattributes export-ignore` for `.github/`, `tests/`, `*.md` (except LICENSE) |
+| 404 on `/chat/completions` | "Cannot POST …" (e.g. AnythingLLM) | Base URL misses the OpenAI-compat path part; `listModels`/`generateReply` auto-probe `BASE_URL_SUFFIXES` (`/v1`, `/api/v1/openai`, …) and cache the resolved base per session |
+| AnythingLLM 401 on generate | Key valid, models load fine | `model` must be the **workspace slug** (from `/models` dropdown), not the display name |
 
 ---
 
