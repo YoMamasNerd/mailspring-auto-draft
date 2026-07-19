@@ -388,6 +388,19 @@ test('checkForUpdates: findet neue stabile Version, ignoriert Prerelease auf sta
   assert.equal(result.downloadUrl, 'http://example/zip');
 });
 
+test('pendingUpdateVersion: räumt veraltete Update-Hinweise auf', () => {
+  // Hinweis auf eine bereits installierte (oder ältere) Version → weg damit
+  reset({ autoUpdateAvailableVersion: '0.0.1', autoUpdateReleaseNotes: 'alt' });
+  assert.equal(AIService.pendingUpdateVersion(), '');
+  assert.equal(configStore['ai-reply-drafts.autoUpdateAvailableVersion'], '');
+  assert.equal(configStore['ai-reply-drafts.autoUpdateReleaseNotes'], '');
+
+  // Hinweis auf eine echte neuere Version bleibt bestehen
+  reset({ autoUpdateAvailableVersion: '99.0.0' });
+  assert.equal(AIService.pendingUpdateVersion(), '99.0.0');
+  assert.equal(configStore['ai-reply-drafts.autoUpdateAvailableVersion'], '99.0.0');
+});
+
 test('checkForUpdates: aktuelle Version → kein Update', async () => {
   reset({ ...BASE_CONFIG, autoUpdateEnabled: true, autoUpdateChannel: 'stable' });
   global.fetch = async () =>
