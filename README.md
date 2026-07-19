@@ -17,7 +17,8 @@ Generiert KI-Antwortvorschläge oder neue E-Mails über eine beliebige **OpenAI-
 ### 🔄 Auto-Updater
 - Prüft täglich (konfigurierbar) GitHub Releases auf neue Versionen
 - Button „Jetzt auf Updates prüfen“ in den Einstellungen
-- Nach Download: Mailspring neu starten → ZIP manuell installieren
+- **Installiert automatisch** direkt ins Plugin-Verzeichnis (Staging + Validierung + Backup der alten Version) und bietet danach den Reload von Mailspring an
+- Fallback: Schlägt die Installation fehl, bleibt das ZIP für die manuelle Installation liegen
 - Kanäle: **Stable** oder **Prerelease** (für Beta-Tester)
 
 ### 🏥 Health-Check & Auto-Failover
@@ -145,10 +146,10 @@ Unter **Einstellungen → AI Drafts**:
 - Timeout pro Anfrage: 90 Sekunden.
 - **„Cannot POST /chat/completions“ / 404**: Die Basis-URL zeigt nicht auf den OpenAI-kompatiblen Teil des Backends. Das Plugin probiert die üblichen Pfad-Varianten (`/v1`, `/api/v1/openai`, …) automatisch durch; schlägt auch das fehl, nennt die Fehlermeldung die geprüften URLs.
 - **AnythingLLM: „API-Fehler 500 … keine Details vom Backend“**: Der Fehler passiert im AnythingLLM-Server selbst (Details nur in dessen Server-Logs, z.B. `docker logs`). Das Plugin weicht in diesem Fall automatisch auf die native Workspace-Chat-API (`/api/v1/workspace/<slug>/stream-chat`) aus, die einen anderen Code-Pfad nutzt — die Generierung funktioniert dann trotzdem.
-- **Auto-Update**: Nach Download des ZIPs muss Mailspring neu gestartet und das ZIP manuell über „Install Plugin“ installiert werden (Mailspring unterstützt kein Hot-Reload).
+- **Auto-Update**: Updates werden direkt ins Plugin-Verzeichnis installiert; aktiv werden sie erst nach dem angebotenen Reload bzw. einem Neustart (Mailspring unterstützt kein Hot-Reload). Die vorherige Version liegt als Backup unter `mailspring-auto-draft-updates/backup-<version>` im Mailspring-Datenverzeichnis.
 
 ## Release-Infos
 
-- **Aktuelles Release**: [v0.4.2](https://github.com/YoMamasNerd/mailspring-auto-draft/releases/tag/v0.4.2)
+- **Aktuelles Release**: [v0.4.3](https://github.com/YoMamasNerd/mailspring-auto-draft/releases/tag/v0.4.3)
 - **Changelog**: [GitHub Releases](https://github.com/YoMamasNerd/mailspring-auto-draft/releases)
 - **Plugin-ZIP** enthält nur Runtime-Files (`lib/`, `styles/`, `package.json`, `LICENSE`) — Tests, `.github/`, Config-Files sind via `.gitattributes export-ignore` ausgeklammert.

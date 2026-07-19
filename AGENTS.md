@@ -26,6 +26,7 @@ mailspring-auto-draft/
 │   ├── main.js              # Plugin entry: ComponentRegistry + PreferencesUIStore
 │   ├── ai-draft-panel.js    # Composer panel (React): generate/stream/refine/insert/undo
 │   ├── ai-service.js        # Core logic: API calls, streaming, caching, health-check, failover, updater
+│   ├── update-installer.js  # ZIP-Extraktion (pure Node/zlib) + Install ins Plugin-Verzeichnis
 │   ├── preferences.js       # Settings UI (React): validation, export/import, model loading, updater UI
 │   ├── thread-context.js    # Loads thread history from Mailspring DatabaseStore
 │   ├── text-utils.js        # HTML↔text, quote stripping, signature detection
@@ -122,7 +123,7 @@ every change to `lib/`.** UI behavior still needs manual verification:
 | **Health check** | Enable Health-Check → wait 5 min or click "Jetzt prüfen" → 🟢/🔴 indicator |
 | **Failover** | Enable Failover + add fallbacks → kill backend → auto-switches model |
 | **Export/Import** | Export → edit JSON → Import → settings restored |
-| **Auto-Updater** | Settings → "Jetzt auf Updates prüfen" → downloads ZIP → shows path |
+| **Auto-Updater** | Settings → "Jetzt auf Updates prüfen" → downloads ZIP → installs into plugin dir → offers reload; backup lands in `mailspring-auto-draft-updates/backup-<version>` |
 | **Theme** | Toggle OS dark/light mode → panel adapts via CSS vars |
 
 ---
@@ -157,7 +158,7 @@ every change to `lib/`.** UI behavior still needs manual verification:
 | Boundary | Rule |
 |---|---|
 | **No build tools** | Never add Webpack, Vite, Babel, TypeScript — Mailspring loads raw JS |
-| **No Node APIs in renderer** | `fs`, `path`, `os` only in `ai-service.js` (runs in main via `AppEnv` bridge) |
+| **No Node APIs in renderer** | `fs`, `path`, `os`, `zlib` only in `ai-service.js` and `update-installer.js` |
 | **Settings schema** | All config keys must be in `DEFAULTS` (ai-service.js) AND `FIELDS` (preferences.js) |
 | **State isolation** | Each composer = new `AiDraftPanel` instance; no shared mutable state |
 | **Mailspring APIs** | Use only `mailspring-exports`: `ComponentRegistry`, `PreferencesUIStore`, `Actions`, `DatabaseStore`, `DraftEditingSession` |
@@ -214,7 +215,7 @@ every change to `lib/`.** UI behavior still needs manual verification:
 
 ## Version & Changelog
 
-- **Current**: `0.4.2` (see `package.json`)
+- **Current**: `0.4.3` (see `package.json`)
 - **Release tags**: `v*` → GitHub Actions builds clean ZIP → Release asset
 - **Changelog**: Auto-generated from commit subjects (Conventional Commits)
 
