@@ -1,6 +1,6 @@
 {
   "name": "ai-reply-drafts",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "./lib/main",
   "title": "AI Reply Drafts",
   "description": "Generiert KI-E-Mail-Entwürfe über eine OpenAI-kompatible API — mit Streaming, Ton-Schnellwahl, Verfeinerung und Betreffvorschlägen.",

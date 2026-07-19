@@ -213,7 +213,7 @@ every change to `lib/`.** UI behavior still needs manual verification:
 
 ## Version & Changelog
 
-- **Current**: `0.4.0` (see `package.json`)
+- **Current**: `0.4.1` (see `package.json`)
 - **Release tags**: `v*` → GitHub Actions builds clean ZIP → Release asset
 - **Changelog**: Auto-generated from commit subjects (Conventional Commits)
 
