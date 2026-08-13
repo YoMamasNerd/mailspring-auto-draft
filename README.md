@@ -43,11 +43,6 @@ Generiert KI-Antwortvorschläge oder neue E-Mails über eine beliebige **OpenAI-
 - JSON-Backup aller Settings (ohne API-Key)
 - Import validiert gegen erlaubte Keys
 
-### 💰 Token-Counter & Cost-Estimate
-- Live-Anzeige pro Draft: `≈ 1.2k Tokens · ≈ $0.0004`
-- Preise für OpenAI, Anthropic, Google, DeepSeek, kostenlose Modelle ($0) hinterlegt
-- Lokale/gratis Modelle = 0
-
 ### 📎 Attachment-Kontext
 - Dateiname & Typ der Composer-Anhänge werden als Kontext mitgesendet (max 5 MB/Anhang, max 3 Anhänge)
 - Checkbox in Settings; inhaltliche RAG-Anbindung läuft backend-seitig (z.B. Open WebUI `files` über die zusätzlichen Request-Parameter)
