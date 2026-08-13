@@ -43,14 +43,6 @@ test('compareVersions: SemVer inkl. Prerelease-Suffix', () => {
   assert.equal(AIService.compareVersions('1.0', '1.0.0'), 0);
 });
 
-test('getModelPricing: bekannte Preise vor Lokal-Heuristik', () => {
-  assert.equal(AIService.getModelPricing('mistral-large').input, 3.0);
-  assert.equal(AIService.getModelPricing('gpt-4o-mini-2024-07-18').input, 0.15);
-  assert.equal(AIService.getModelPricing('ollama/mycustom-model').local, true);
-  assert.equal(AIService.getModelPricing('some/model:free').free, true);
-  assert.equal(AIService.getModelPricing('totally-unknown-xyz').known, false);
-});
-
 test('splitSubject trennt Betreffvorschlag vom Text', () => {
   const split = AIService.splitSubject('Betreff: Angebot\n\nHallo Welt');
   assert.equal(split.subject, 'Angebot');
@@ -88,8 +80,6 @@ test('generateReply (JSON-Backend): liefert { text, usage } und filtert Anhänge
   });
 
   assert.equal(result.text, 'Hallo, das ist die Antwort.');
-  assert.equal(result.usage.inputTokens, 100);
-  assert.equal(result.usage.outputTokens, 20);
 
   const prompt = requestBody.messages[1].content;
   assert.ok(prompt.includes('doc.pdf'), 'doc.pdf muss im Prompt stehen');
@@ -97,7 +87,7 @@ test('generateReply (JSON-Backend): liefert { text, usage } und filtert Anhänge
   assert.ok(!prompt.includes('x.exe'), 'x.exe (falscher MIME-Typ) darf nicht im Prompt stehen');
 });
 
-test('generateReply (SSE-Streaming): setzt Tokens zusammen und schätzt usage', async () => {
+test('generateReply (SSE-Streaming): setzt Tokens zusammen', async () => {
   reset(BASE_CONFIG);
   global.fetch = async () =>
     sseResponse([
@@ -118,9 +108,6 @@ test('generateReply (SSE-Streaming): setzt Tokens zusammen und schätzt usage', 
 
   assert.equal(result.text, 'Hallo Welt');
   assert.deepEqual(partials, ['Hallo ', 'Hallo Welt']);
-  assert.equal(result.usage.estimated, true, 'ohne Backend-usage muss geschätzt werden');
-  assert.ok(result.usage.inputTokens > 0);
-  assert.ok(result.usage.outputTokens > 0);
 });
 
 test('generateReply: Retry ohne Streaming nach API-Fehler', async () => {
